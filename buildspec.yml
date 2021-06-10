@@ -17,3 +17,8 @@ phases:
 artifacts:
   files:
     - target/hello-1.0-SNAPSHOT.jar
+reports:
+  junit-reports:
+    files:
+      - 'target/surefire-reports/*.xml'
+    file-format: 'JUNITXML'
