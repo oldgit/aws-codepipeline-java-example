@@ -20,11 +20,6 @@ public class CatalogueItem {
     @Column("ID")
     private Long id;
 
-    @NotEmpty(message = "SKU cannot be null or empty")
-    @NonNull
-    @Column("SKU_NUMBER")
-    private String sku;
-
     @NotEmpty(message = "Name cannot be null or empty")
     @NonNull
     @Column("ITEM_NAME")
@@ -59,4 +54,5 @@ public class CatalogueItem {
 
     @Column("UPDATED_ON")
     private Instant updatedOn;
+
 }

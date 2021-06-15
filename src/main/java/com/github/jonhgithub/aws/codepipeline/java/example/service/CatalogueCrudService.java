@@ -31,8 +31,8 @@ public class CatalogueCrudService {
         return catalogueRepository.findAll(sort);
     }
 
-    public Mono<CatalogueItem> getCatalogueItem( String skuNumber) throws ResourceNotFoundException {
-        return getCatalogueItemBySku(skuNumber);
+    public Mono<CatalogueItem> getCatalogueItem(Long id) throws ResourceNotFoundException {
+        return getCatalogueItemById(id);
     }
 
     public Mono<Long> addCatalogItem(CatalogueItem catalogueItem) {
@@ -44,9 +44,9 @@ public class CatalogueCrudService {
                 .flatMap(item -> Mono.just(item.getId()));
     }
 
-    public void updateCatalogueItem(CatalogueItem catalogueItem) throws ResourceNotFoundException{
+    public void updateCatalogueItem(Long id, CatalogueItem catalogueItem) throws ResourceNotFoundException{
 
-        Mono<CatalogueItem> catalogueItemfromDB = getCatalogueItemBySku(catalogueItem.getSku());
+        Mono<CatalogueItem> catalogueItemfromDB = getCatalogueItemById(id);
 
         catalogueItemfromDB.subscribe(
             value -> {
@@ -68,10 +68,10 @@ public class CatalogueCrudService {
         catalogueRepository.delete(catalogueItem).subscribe();
     }
 
-    private Mono<CatalogueItem> getCatalogueItemBySku(String skuNumber) throws ResourceNotFoundException {
-        return catalogueRepository.findBySku(skuNumber)
+    private Mono<CatalogueItem> getCatalogueItemById(Long id) throws ResourceNotFoundException {
+        return catalogueRepository.findById(id)
             .switchIfEmpty(Mono.defer(() -> Mono.error(new ResourceNotFoundException(
-                String.format("Catalogue Item not found for the provided SKU :: %s" , skuNumber)))));
+                String.format("Catalogue Item not found for the provided id :: %s" , id)))));
     }
 
 }

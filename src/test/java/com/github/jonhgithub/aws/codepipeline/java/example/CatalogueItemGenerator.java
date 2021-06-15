@@ -22,7 +22,6 @@ public class CatalogueItemGenerator {
     private static CatalogueItem generateCatalogueItem(Long id) {
         CatalogueItem item = new CatalogueItem();
         item.setId(id);
-        item.setSku("SKU-1234");
         item.setName("Item Name");
         item.setDescription("Item Desc");
         item.setCategory("Books");

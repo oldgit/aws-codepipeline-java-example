@@ -64,7 +64,6 @@ public class CatalogueControllerTest {
             .expectHeader().contentType(MediaType.APPLICATION_JSON)
             .expectBody()
             .jsonPath("$.[0].id").isNotEmpty()
-            .jsonPath("$.[0].sku").isNotEmpty()
             .jsonPath("$.[0].name").isNotEmpty()
             .jsonPath("$.[0].description").isNotEmpty();
     }
@@ -77,14 +76,13 @@ public class CatalogueControllerTest {
 
         this.client
             .get()
-            .uri(replaceSKU(CatalogueController.GET_ITEM))
+            .uri(replaceId(CatalogueController.GET_ITEM))
             .accept(MediaType.APPLICATION_JSON)
             .exchange()
             .expectStatus().isOk()
             .expectHeader().contentType(MediaType.APPLICATION_JSON)
             .expectBody()
             .jsonPath("$.id").isNotEmpty()
-            .jsonPath("$.sku").isNotEmpty()
             .jsonPath("$.name").isNotEmpty()
             .jsonPath("$.description").isNotEmpty();
     }
@@ -135,7 +133,7 @@ public class CatalogueControllerTest {
 
         this.client
             .put()
-            .uri(replaceSKU(CatalogueController.UPDATE))
+            .uri(replaceId(CatalogueController.UPDATE))
             .contentType(MediaType.APPLICATION_JSON)
             .body(Mono.just(CatalogueItemGenerator.generateCatalogueItem()), CatalogueItem.class)
             .exchange()
@@ -149,7 +147,7 @@ public class CatalogueControllerTest {
 
         this.client
             .delete()
-            .uri(replaceSKU(CatalogueController.DELETE))
+            .uri(replaceId(CatalogueController.DELETE))
             .exchange()
             .expectStatus().isNoContent();
     }
@@ -183,7 +181,7 @@ public class CatalogueControllerTest {
 
         this.client
             .get()
-            .uri(CatalogueController.GET_ITEM.replaceAll("\\{sku\\}", "INVALID"))
+            .uri(CatalogueController.GET_ITEM.replaceAll("\\{id\\}", "-1"))
             .accept(MediaType.APPLICATION_JSON)
             .exchange()
             .expectStatus().isNotFound()
@@ -203,7 +201,7 @@ public class CatalogueControllerTest {
             .expectStatus().isCreated();
     }
 
-    private String replaceSKU(String path) {
-        return path.replaceAll("\\{sku\\}", catalogueItem.getSku());
+    private String replaceId(String path) {
+        return path.replaceAll("\\{id\\}", catalogueItem.getId().toString());
     }
 }

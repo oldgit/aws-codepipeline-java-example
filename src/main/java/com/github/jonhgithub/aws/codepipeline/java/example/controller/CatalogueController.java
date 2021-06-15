@@ -35,9 +35,9 @@ public class CatalogueController {
     static final String CREATE = "/";
     static final String GET_ITEMS = "/";
     static final String GET_ITEMS_STREAM = "/stream";
-    static final String GET_ITEM = "/{sku}";
-    static final String UPDATE = "/{sku}";
-    static final String DELETE = "/{sku}";
+    static final String GET_ITEM = "/{id}";
+    static final String UPDATE = "/{id}";
+    static final String DELETE = "/{id}";
     
     private final CatalogueCrudService catalogueCrudService;
 
@@ -74,17 +74,17 @@ public class CatalogueController {
     }
 
     /**
-     * Get Catalogue Item by SKU
-     * @param skuNumber
+     * Get Catalogue Item
+     * @param id
      * @return catalogueItem
      * @throws ResourceNotFoundException
      */
     @GetMapping(GET_ITEM)
     public Mono<CatalogueItem>
-        getCatalogueItemBySKU(@PathVariable(value = "sku") String skuNumber)
+        getCatalogueItem(@PathVariable(value = "id") Long id)
             throws ResourceNotFoundException {
 
-        return catalogueCrudService.getCatalogueItem(skuNumber);
+        return catalogueCrudService.getCatalogueItem(id);
     }
 
     /**
@@ -102,7 +102,7 @@ public class CatalogueController {
     }
 
     /**
-     * Update Catalogue Item by SKU
+     * Update Catalogue Item
      * @param skuNumber
      * @param catalogueItem
      * @throws ResourceNotFoundException
@@ -110,23 +110,23 @@ public class CatalogueController {
     @PutMapping(UPDATE)
     @ResponseStatus(value = HttpStatus.OK)
     public void updateCatalogueItem(
-        @PathVariable(value = "sku") String skuNumber,
+        @PathVariable(value = "id") Long id,
         @Valid @RequestBody CatalogueItem catalogueItem) throws ResourceNotFoundException {
 
-        catalogueCrudService.updateCatalogueItem(catalogueItem);
+        catalogueCrudService.updateCatalogueItem(id, catalogueItem);
     }
 
     /**
-     * Delete Catalogue Item by SKU
-     * @param skuNumber
+     * Delete Catalogue Item
+     * @param id
      * @throws ResourceNotFoundException
      */
     @DeleteMapping(DELETE)
     @ResponseStatus(value = HttpStatus.NO_CONTENT)
-    public void removeCatalogItem(@PathVariable(value = "sku") String skuNumber)
+    public void removeCatalogItem(@PathVariable(value = "id") Long id)
         throws ResourceNotFoundException {
 
-        Mono<CatalogueItem> catalogueItem = catalogueCrudService.getCatalogueItem(skuNumber);
+        Mono<CatalogueItem> catalogueItem = catalogueCrudService.getCatalogueItem(id);
         catalogueItem.subscribe(
             value -> {
                 catalogueCrudService.deleteCatalogueItem(value);
