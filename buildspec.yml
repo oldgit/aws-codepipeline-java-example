@@ -18,7 +18,11 @@ artifacts:
   files:
     - target/hello-1.0-SNAPSHOT.jar
 reports:
-  junit-reports:
+  junit-report:
     files:
       - 'target/surefire-reports/*.xml'
     file-format: 'JUNITXML'
+  jacoco-report:
+    files:
+      - 'target/site/jacoco/jacoco.xml'
+    file-format: 'JACOCOXML'
